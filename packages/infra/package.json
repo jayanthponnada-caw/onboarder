@@ -1,0 +1,27 @@
+{
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:^",
+		"@types/node": "^25.9.1",
+		"dotenv": "^17.4.2",
+		"tsx": "^4.22.3",
+		"typescript": "^6.0.3"
+	},
+	"name": "@repo/infra",
+	"private": true,
+	"scripts": {
+		"check": "tsx scripts/check.ts",
+		"check-types": "tsc --noEmit",
+		"db:logs": "docker compose --env-file .env -f compose.yaml logs -f postgres neon-proxy",
+		"db:up": "docker compose --env-file .env -f compose.yaml up -d postgres neon-proxy",
+		"down": "docker compose --env-file .env -f compose.yaml down --remove-orphans",
+		"down:volumes": "docker compose --env-file .env -f compose.yaml down -v --remove-orphans",
+		"inngest:logs": "docker compose --env-file .env -f compose.yaml logs -f inngest",
+		"inngest:up": "docker compose --env-file .env -f compose.yaml up -d inngest",
+		"logs": "docker compose --env-file .env -f compose.yaml logs -f",
+		"ps": "docker compose --env-file .env -f compose.yaml ps",
+		"reset": "tsx scripts/reset.ts",
+		"setup": "tsx scripts/setup.ts",
+		"up": "tsx scripts/setup.ts --up-only"
+	},
+	"type": "module"
+}

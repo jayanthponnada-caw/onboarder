@@ -1,0 +1,48 @@
+{
+	"dependencies": {
+		"vibe-rules": "^0.3.91"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.5",
+		"@tanstack/intent": "^0.0.41",
+		"husky": "^9.1.7",
+		"turbo": "^2.9.16",
+		"typescript": "5.9.2"
+	},
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"name": "onboarder",
+	"packageManager": "pnpm@9.0.0",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"check": "biome check . && pnpm check-types",
+		"check-types": "turbo run check-types",
+		"check:no-dirty": "node -e \"const {existsSync} = require('node:fs'); const {execSync} = require('node:child_process'); if (!existsSync('.git')) process.exit(0); try { execSync('git diff --quiet --', { stdio: 'ignore' }); } catch (error) { console.error('husky pre-commit: formatting/typecheck updated files. stage changes and re-run commit.'); process.exit(1); }\"",
+		"db:logs": "pnpm --filter @repo/infra run db:logs",
+		"db:up": "pnpm --filter @repo/infra run db:up",
+		"dev": "turbo run dev",
+		"format": "biome check --write --unsafe .",
+		"format:check": "biome check .",
+		"infra:check": "pnpm --filter @repo/infra run check",
+		"infra:down": "pnpm --filter @repo/infra run down",
+		"infra:logs": "pnpm --filter @repo/infra run logs",
+		"infra:ps": "pnpm --filter @repo/infra run ps",
+		"infra:reset": "pnpm --filter @repo/infra run reset",
+		"infra:setup": "pnpm --filter @repo/infra run setup",
+		"infra:up": "pnpm --filter @repo/infra run up",
+		"inngest:logs": "pnpm --filter @repo/infra run inngest:logs",
+		"inngest:up": "pnpm --filter @repo/infra run inngest:up",
+		"intent:install": "pnpm dlx @tanstack/intent@latest install --map",
+		"intent:install:dry": "pnpm dlx @tanstack/intent@latest install --map --dry-run",
+		"intent:list": "pnpm dlx @tanstack/intent@latest list",
+		"intent:stale": "pnpm dlx @tanstack/intent@latest stale",
+		"lint": "turbo run lint",
+		"orpc:check": "pnpm orpc:typecheck",
+		"orpc:dev": "turbo run dev --parallel --filter core --filter web",
+		"orpc:typecheck": "pnpm --filter @repo/api-contract check-types && pnpm --filter @repo/db check-types && pnpm --filter core check-types && pnpm --filter web check-types",
+		"precommit": "pnpm format && pnpm lint && pnpm check-types && pnpm check:no-dirty",
+		"prepare": "husky"
+	}
+}

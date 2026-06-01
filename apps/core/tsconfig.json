@@ -1,0 +1,12 @@
+{
+	"extends": "@repo/typescript-config/cloudflare-worker.json",
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"references": [
+		{
+			"path": "../../packages/api-contract"
+		},
+		{
+			"path": "../../packages/db"
+		}
+	]
+}

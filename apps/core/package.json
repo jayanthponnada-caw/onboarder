@@ -1,0 +1,29 @@
+{
+	"dependencies": {
+		"@clerk/backend": "^3.4.14",
+		"@clerk/hono": "^0.1.32",
+		"@orpc/json-schema": "1.14.3",
+		"@orpc/openapi": "1.14.3",
+		"@orpc/server": "1.14.3",
+		"@orpc/zod": "1.14.3",
+		"@repo/api-contract": "workspace:^",
+		"@repo/db": "workspace:^",
+		"@t3-oss/env-core": "^0.13.11",
+		"hono": "^4.12.21",
+		"inngest": "^4.4.0",
+		"zod": "^3.25.76"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"wrangler": "^4.4.0"
+	},
+	"name": "core",
+	"scripts": {
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"check-types": "tsc --noEmit",
+		"deploy": "wrangler deploy --minify",
+		"dev": "wrangler dev --port 3001",
+		"lint": "biome check ."
+	},
+	"type": "module"
+}

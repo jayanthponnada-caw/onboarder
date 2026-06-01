@@ -1,0 +1,51 @@
+name: ${COMPOSE_PROJECT_NAME:-onboarder}
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: onboarder-postgres
+    command: "-d 1"
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-main}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-main}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    container_name: onboarder-neon-proxy
+    restart: unless-stopped
+    environment:
+      PG_CONNECTION_STRING: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-main}
+    ports:
+      - "${NEON_PROXY_PORT:-4444}:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  inngest:
+    image: inngest/inngest:latest
+    container_name: onboarder-inngest
+    restart: unless-stopped
+    command: "inngest dev --no-discovery -u ${INNGEST_HONO_URL:-http://host.docker.internal:3001/inngest}"
+    ports:
+      - "${INNGEST_PORT:-8288}:8288"
+      - "${INNGEST_CONNECT_PORT:-8289}:8289"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres-data:
