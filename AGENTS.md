@@ -102,3 +102,84 @@ docs(api): document hono orpc openapi routing
 fix(core): move inngest off api namespace
 ```
 <!-- agent-commits:end -->
+
+<!-- agent-standards:start -->
+# Onboarder agent standards
+
+Use these rules as the repo-wide baseline. Child `AGENTS.md` files may tighten them for a specific app or package.
+
+## Scope and workflow
+
+- Work from the repository root unless a child file gives a package-specific command.
+- Keep changes limited to the request and the touched app or package.
+- Prefer current repo state over assumptions. Check nearby code, package scripts, and existing docs before changing behavior.
+- Use Windows and PowerShell-friendly commands. Do not rely on Unix-only command examples.
+- Ask before adding dependencies, changing public contracts, changing auth behavior, moving boundaries, or editing deployment/runtime configuration.
+- Never edit secrets in `.env*` files unless explicitly requested.
+
+## Repository shape
+
+```txt
+apps/
+  core/      Hono API service, oRPC implementation, Clerk middleware, Inngest routes
+  web/       TanStack Start React app
+packages/
+  api-contract/       shared oRPC contract and Zod schemas
+  db/                 Drizzle/Postgres access
+  design-system/      shared React UI components and styles
+  infra/              local infrastructure commands
+  typescript-config/  shared TypeScript config
+```
+
+## Coding rules
+
+- Make invalid states unrepresentable with types and schemas where practical.
+- Validate external input at app/API boundaries before it reaches business logic.
+- Keep side effects explicit and localized to routes, server functions, handlers, adapters, or services.
+- Avoid `any`; use `unknown` plus narrowing at unsafe boundaries.
+- Use type-only imports for type-only values.
+- Prefer `satisfies` for object contract checks without widening literals.
+- Prefer guard clauses and readable happy paths.
+- Use `const` by default and avoid hidden mutation.
+- Keep shared contracts in `packages/api-contract`; do not duplicate API shapes in apps.
+- Keep `packages/api-contract` implementation-free. Do not import Hono, Clerk middleware, Drizzle clients, database drivers, Inngest functions, or environment parsing there.
+- Keep browser and SSR code in `apps/web` away from Hono, Drizzle clients, database drivers, server environment parsing, and Inngest implementation code.
+
+## Declarative and functional programming rules
+
+Code in this repo should prefer declarative and functional structure by default.
+
+- Treat render, transformation, selector, parser, and validation logic as pure and idempotent: same inputs should produce the same output.
+- Keep side effects out of render-time and derivation code. Put side effects in event handlers, explicit effects, server functions, route handlers, service adapters, or infrastructure boundaries.
+- Prefer expressions that describe the desired result over step-by-step mutation. Use composition, data mapping, pattern matching with discriminated unions, and explicit state machines where they clarify behavior.
+- Prefer immutable updates. Return new arrays and objects instead of mutating inputs, props, state, context, or module-level values.
+- Use `readonly`, `Readonly<T>`, `as const`, and narrow DTO types for shared contracts when mutation would create risk.
+- Prefer `map`, `filter`, `flatMap`, `reduce`, `Object.entries`, and small named transformation helpers over manual accumulator mutation when readability remains high.
+- Avoid clever point-free chains, deeply nested pipelines, or `reduce` gymnastics when a named helper or simple loop is clearer.
+- Keep functions small and single-purpose. Separate pure calculations from impure orchestration.
+- Model business outcomes with typed values such as discriminated unions or result objects before reaching for exceptions.
+- Inject time, randomness, IDs, environment, storage, network clients, and other non-deterministic dependencies at the boundary instead of reading them inside pure logic.
+- Prefer derived state over duplicated stored state. Store only the minimum state needed to derive the UI or workflow.
+- Use declarative data loading and cache APIs already in the stack, such as TanStack Query options and TanStack DB collections, instead of hand-written imperative synchronization.
+- Keep React components as declarative descriptions of UI for the current state. Components should not mutate external values or depend on render order.
+- Make effects narrow and purposeful: synchronize with an external system, subscribe/unsubscribe, schedule timers, or perform imperative browser work. Do not use effects to compute values that can be derived during render.
+
+## Documentation rules
+
+- Root project language belongs in `CONTEXT.md`.
+- `CONTEXT.md` is a glossary only. Do not turn it into a spec, implementation plan, or scratch pad.
+- Architecture decisions belong in `docs/adr/` only when the decision is hard to reverse, surprising without context, and based on a real trade-off.
+- Keep docs aligned with shipped behavior and current package scripts.
+
+## Verification
+
+Before ending a response in this repository, run:
+
+```powershell
+pnpm format
+pnpm lint
+pnpm check-types
+```
+
+Resolve reported issues and re-run until clean. If a command cannot be run, explain why.
+<!-- agent-standards:end -->

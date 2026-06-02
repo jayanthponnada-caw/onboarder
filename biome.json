@@ -114,7 +114,14 @@
 				"useJsxKeyInIterable": "error"
 			},
 			"nursery": {
-				"useSortedClasses": "warn"
+				"useSortedClasses": {
+					"fix": "unsafe",
+					"level": "warn",
+					"options": {
+						"attributes": ["classList"],
+						"functions": ["clsx", "cva", "tw", "tw.*"]
+					}
+				}
 			},
 			"performance": {
 				"noAccumulatingSpread": "warn",
