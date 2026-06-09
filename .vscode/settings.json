@@ -83,7 +83,7 @@
 		"**/pnpm-lock.yaml": true,
 		"**/postcss.config.cjs": true,
 		"**/README.md": true,
-		"**/Thumbs.db": true,
+		"**/Thumbs.db": false,
 		"**/venv": true,
 		"bun.lockb": true,
 		"CREDITS": true,
