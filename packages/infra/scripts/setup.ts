@@ -1,9 +1,10 @@
-import { fail, loadInfraEnv, log, ok, run } from "./utils.ts"
+import { ensureLocalEnvFiles, fail, loadInfraEnv, log, ok, run } from "./utils.ts"
 
 const upOnly = process.argv.includes("--up-only")
 
 async function main() {
 	log("starting local infrastructure setup")
+	ensureLocalEnvFiles()
 	const env = loadInfraEnv()
 
 	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "pull"])

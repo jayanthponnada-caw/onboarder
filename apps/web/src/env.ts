@@ -11,6 +11,7 @@ export const env = createEnv({
 		VITE_CLERK_SIGN_IN_URL: z.string().min(1).default("/sign-in"),
 		VITE_CLERK_SIGN_UP_URL: z.string().min(1).default("/sign-up"),
 		VITE_INNGEST_BASE_URL: z.string().url().optional(),
+		VITE_SENTRY_ENABLED: z.enum(["false", "true"]).default("false"),
 	},
 	clientPrefix: "VITE_",
 	emptyStringAsUndefined: true,
@@ -27,6 +28,7 @@ export const env = createEnv({
 		VITE_CLERK_SIGN_IN_URL: import.meta.env["VITE_CLERK_SIGN_IN_URL"],
 		VITE_CLERK_SIGN_UP_URL: import.meta.env["VITE_CLERK_SIGN_UP_URL"],
 		VITE_INNGEST_BASE_URL: import.meta.env["VITE_INNGEST_BASE_URL"],
+		VITE_SENTRY_ENABLED: import.meta.env["VITE_SENTRY_ENABLED"],
 	},
 	server: {
 		API_ORIGIN: z.string().url(),

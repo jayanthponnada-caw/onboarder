@@ -3,7 +3,7 @@ import { defineConfig } from "drizzle-kit"
 
 import { createDbEnv } from "./src/env.ts"
 
-config({ path: "../../.env" })
+config({ path: ".env" })
 
 const env = createDbEnv({
 	DATABASE_URL: process.env["DATABASE_URL"],

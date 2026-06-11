@@ -147,7 +147,8 @@ Create `packages/infra/package.json`:
     "db:up": "docker compose --env-file .env -f compose.yaml up -d postgres neon-proxy",
     "db:logs": "docker compose --env-file .env -f compose.yaml logs -f postgres neon-proxy",
     "inngest:up": "docker compose --env-file .env -f compose.yaml up -d inngest",
-    "inngest:logs": "docker compose --env-file .env -f compose.yaml logs -f inngest"
+    "inngest:logs": "docker compose --env-file .env -f compose.yaml logs -f inngest",
+    "scrap": "tsx scripts/scrap-local-infra.ts"
   },
   "devDependencies": {
     "tsx": "latest",
@@ -164,6 +165,7 @@ Add root scripts in root `package.json`:
     "infra:setup": "pnpm --filter @repo/infra run setup",
     "infra:check": "pnpm --filter @repo/infra run check",
     "infra:reset": "pnpm --filter @repo/infra run reset",
+    "infra:scrap": "pnpm --filter @repo/infra run scrap",
     "infra:up": "pnpm --filter @repo/infra run up",
     "infra:down": "pnpm --filter @repo/infra run down",
     "infra:logs": "pnpm --filter @repo/infra run logs",
@@ -202,6 +204,21 @@ INNGEST_HONO_URL=http://host.docker.internal:3001/inngest
 ```
 
 Do not commit `packages/infra/.env`.
+
+Setup should create missing local env files from committed examples:
+
+```txt
+.env.example                       -> .env
+apps/core/.dev.vars.example         -> apps/core/.dev.vars
+apps/web/.env.example               -> apps/web/.env
+packages/db/.env.example            -> packages/db/.env
+packages/infra/.env.example         -> packages/infra/.env
+```
+
+When a target env file already exists, setup should leave it untouched. If a new
+key is added to an example later, update the local env file manually or recreate
+it from the example. This keeps setup simple and avoids mutating existing local
+secret files.
 
 Update root `.gitignore`:
 
@@ -407,6 +424,20 @@ async function main() {
 main().catch((error) => fail(error instanceof Error ? error.message : String(error)))
 ```
 
+Create `packages/infra/scripts/scrap-local-infra.ts` as the only local infra
+scrapping script. It must:
+
+- load `packages/infra/.env`;
+- refuse non-local `DATABASE_URL` hosts such as managed Neon, cloud Postgres, or
+  production databases;
+- refuse non-local `COMPOSE_PROJECT_NAME` values;
+- run `docker compose --env-file .env -f compose.yaml down -v --remove-orphans`;
+- remove only this local Compose project's containers, network, and volumes.
+
+This script must not connect to deployed infrastructure and must not run SQL
+against any deployed Postgres database. It is a local Docker Compose teardown
+only.
+
 ### Phase 5: Create `@repo/db` with Neon drivers
 
 Create/modify `packages/db/package.json`:
@@ -448,7 +479,7 @@ Create `packages/db/drizzle.config.ts`:
 import { config } from "dotenv"
 import { defineConfig } from "drizzle-kit"
 
-config({ path: "../../.env" })
+config({ path: ".env" })
 
 export default defineConfig({
   schema: "./src/schema/index.ts",
@@ -705,8 +736,16 @@ pnpm --filter core dev
 
 If Docker data needs reset:
 
-```bash
+```powershell
 pnpm infra:reset
+```
+
+If local Docker containers, networks, and volumes need to be removed completely:
+
+```powershell
+pnpm infra:scrap
+pnpm infra:setup
+pnpm --filter @repo/db db:migrate
 ```
 
 ---
@@ -715,6 +754,8 @@ pnpm infra:reset
 
 - `pnpm list -r --depth -1` shows `@repo/infra` and `@repo/db`.
 - `pnpm infra:setup` creates `packages/infra/.env`, pulls images, starts services, and logs service URLs.
+- `pnpm infra:setup` creates missing local env files from their committed examples without mutating existing env files.
+- `pnpm infra:scrap` removes only local Compose containers, networks, and volumes, and refuses non-local database hosts or project names.
 - `docker compose --env-file packages/infra/.env -f packages/infra/compose.yaml ps` shows `postgres`, `neon-proxy`, and `inngest` running.
 - Root `.env` contains `DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main`.
 - `pnpm --filter @repo/db db:migrate` succeeds.

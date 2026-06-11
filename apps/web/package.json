@@ -52,7 +52,7 @@
 	"scripts": {
 		"build": "vite build && node -e \"require('node:fs').copyFileSync('instrument.server.mjs', '.output/server/instrument.server.mjs')\"",
 		"check-types": "tsc --noEmit",
-		"dev": "dotenv -e .env.local -- node --import ./instrument.server.mjs ./node_modules/vite/bin/vite.js dev --port 3000",
+		"dev": "dotenv -e .env -- node --import ./instrument.server.mjs ./node_modules/vite/bin/vite.js dev --port 3000",
 		"lint": "biome check .",
 		"preview": "vite preview",
 		"start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",

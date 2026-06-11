@@ -30,6 +30,7 @@
 		"infra:logs": "pnpm --filter @repo/infra run logs",
 		"infra:ps": "pnpm --filter @repo/infra run ps",
 		"infra:reset": "pnpm --filter @repo/infra run reset",
+		"infra:scrap": "pnpm --filter @repo/infra run scrap",
 		"infra:setup": "pnpm --filter @repo/infra run setup",
 		"infra:up": "pnpm --filter @repo/infra run up",
 		"inngest:logs": "pnpm --filter @repo/infra run inngest:logs",

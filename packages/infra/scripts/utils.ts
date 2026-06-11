@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import { config } from "dotenv"
 
 export const root = resolve(import.meta.dirname, "..")
+export const repoRoot = resolve(root, "../..")
 
 export type InfraEnv = {
 	DATABASE_URL: string
@@ -32,21 +33,63 @@ export function fail(message: string): never {
 	process.exit(1)
 }
 
-export function ensureEnvFile() {
-	const env = resolve(root, ".env")
-	const example = resolve(root, ".env.example")
+export type EnvFileSpec = {
+	envPath: string
+	examplePath: string
+	label: string
+}
+
+const infraEnvFile: EnvFileSpec = {
+	envPath: resolve(root, ".env"),
+	examplePath: resolve(root, ".env.example"),
+	label: "packages/infra/.env",
+}
+
+const localEnvFiles: EnvFileSpec[] = [
+	{
+		envPath: resolve(repoRoot, ".env"),
+		examplePath: resolve(repoRoot, ".env.example"),
+		label: "root .env",
+	},
+	infraEnvFile,
+	{
+		envPath: resolve(repoRoot, "apps/core/.dev.vars"),
+		examplePath: resolve(repoRoot, "apps/core/.dev.vars.example"),
+		label: "apps/core/.dev.vars",
+	},
+	{
+		envPath: resolve(repoRoot, "apps/web/.env"),
+		examplePath: resolve(repoRoot, "apps/web/.env.example"),
+		label: "apps/web/.env",
+	},
+	{
+		envPath: resolve(repoRoot, "packages/db/.env"),
+		examplePath: resolve(repoRoot, "packages/db/.env.example"),
+		label: "packages/db/.env",
+	},
+]
+
+export function ensureEnvFile(spec: EnvFileSpec = infraEnvFile) {
+	const env = spec.envPath
+	const example = spec.examplePath
 
 	if (existsSync(env)) {
-		ok("packages/infra/.env exists")
+		ok(`${spec.label} exists`)
 		return
 	}
 
 	if (!existsSync(example)) {
-		fail("missing packages/infra/.env.example")
+		fail(`missing ${spec.label} example at ${example}`)
 	}
 
 	copyFileSync(example, env)
-	ok("created packages/infra/.env from .env.example")
+	ok(`created ${spec.label} from ${example}`)
+}
+
+export function ensureLocalEnvFiles() {
+	for (const spec of localEnvFiles) {
+		ensureEnvFile(spec)
+	}
 }
 
 export function loadInfraEnv(): InfraEnv {

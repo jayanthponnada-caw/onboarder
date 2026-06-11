@@ -20,6 +20,7 @@
 		"logs": "docker compose --env-file .env -f compose.yaml logs -f",
 		"ps": "docker compose --env-file .env -f compose.yaml ps",
 		"reset": "tsx scripts/reset.ts",
+		"scrap": "tsx scripts/scrap-local-infra.ts",
 		"setup": "tsx scripts/setup.ts",
 		"up": "tsx scripts/setup.ts --up-only"
 	},
