@@ -46,11 +46,6 @@ const infraEnvFile: EnvFileSpec = {
 }
 
 const localEnvFiles: EnvFileSpec[] = [
-	{
-		envPath: resolve(repoRoot, ".env"),
-		examplePath: resolve(repoRoot, ".env.example"),
-		label: "root .env",
-	},
 	infraEnvFile,
 	{
 		envPath: resolve(repoRoot, "apps/core/.dev.vars"),

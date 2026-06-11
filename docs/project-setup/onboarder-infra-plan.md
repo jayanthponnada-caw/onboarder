@@ -208,7 +208,6 @@ Do not commit `packages/infra/.env`.
 Setup should create missing local env files from committed examples:
 
 ```txt
-.env.example                       -> .env
 apps/core/.dev.vars.example         -> apps/core/.dev.vars
 apps/web/.env.example               -> apps/web/.env
 packages/db/.env.example            -> packages/db/.env
@@ -224,15 +223,6 @@ Update root `.gitignore`:
 
 ```gitignore
 packages/infra/.env
-```
-
-Also create/update root `.env` for apps:
-
-```env
-NODE_ENV=development
-DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main
-INNGEST_DEV=1
-INNGEST_BASE_URL=http://localhost:8288
 ```
 
 ### Phase 3: Add Compose file
@@ -757,7 +747,7 @@ pnpm --filter @repo/db db:migrate
 - `pnpm infra:setup` creates missing local env files from their committed examples without mutating existing env files.
 - `pnpm infra:scrap` removes only local Compose containers, networks, and volumes, and refuses non-local database hosts or project names.
 - `docker compose --env-file packages/infra/.env -f packages/infra/compose.yaml ps` shows `postgres`, `neon-proxy`, and `inngest` running.
-- Root `.env` contains `DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main`.
+- `packages/db/.env` contains `DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main`.
 - `pnpm --filter @repo/db db:migrate` succeeds.
 - Hono `/db/health` succeeds.
 - Hono `/inngest` returns Inngest diagnostics.

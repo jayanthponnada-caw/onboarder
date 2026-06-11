@@ -39,7 +39,6 @@ pnpm inngest:logs
 `pnpm infra:setup` creates missing local env files from their matching examples,
 pulls images, starts services, and checks Postgres readiness:
 
-- `.env` from `.env.example`
 - `apps/core/.dev.vars` from `apps/core/.dev.vars.example`
 - `apps/web/.env` from `apps/web/.env.example`
 - `packages/db/.env` from `packages/db/.env.example`
