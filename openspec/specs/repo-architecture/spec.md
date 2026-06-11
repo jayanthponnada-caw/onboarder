@@ -1,5 +1,10 @@
 # Repo Architecture Specification
 
+## Purpose
+
+Define the package and application boundaries that keep Onboarder Web, Core,
+API contracts, database access, and side effects separated.
+
 ## Requirements
 
 ### Requirement: Web/Core Boundary

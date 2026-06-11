@@ -1,20 +1,47 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Onboarder is a centralized employee onboarding platform. The implementation
+  helps HR, IT, Managers, and New Joiners coordinate onboarding from offer
+  acceptance through Day 30.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Repository architecture:
+  - apps/web: TanStack Start React app for browser and SSR user experience.
+  - apps/core: Hono API service with oRPC OpenAPI implementation, Clerk
+    middleware, and Inngest routes.
+  - packages/api-contract: shared oRPC contracts and Zod schemas only.
+  - packages/db: Drizzle/Postgres schema and data access.
+  - packages/design-system: shared React components and styles.
+  - packages/infra: local Postgres, Neon proxy, and Inngest dev server.
+
+  OpenSpec workflow:
+  - Use active changes under openspec/changes/ for implementation work.
+  - Do not treat docs/project-setup/ plans as replacements for OpenSpec
+    change artifacts. Docs are human-readable implementation guides; OpenSpec
+    changes are the agent-readable work packages.
+  - Prefer behavior specs in spec.md; put implementation details in design.md
+    and execution steps in tasks.md.
+
+  Source PRD summary:
+  - Offer accepted to onboarding workflow trigger.
+  - Role-based task checklist for HR, IT, Manager/CEO, and New Joiner.
+  - Document upload and e-sign tracking.
+  - Asset and access request tracking.
+  - New joiner dashboard.
+  - Automated reminders and notifications.
+  - Completion reporting.
+
+  Repository guardrails:
+  - Keep packages/api-contract implementation-free.
+  - Keep database access in Core and packages/db; do not import DB clients into
+    Web.
+  - Keep Inngest functions in Core unless a future ADR chooses another
+    boundary.
+  - Use .route(...) on oRPC procedures that should be stable OpenAPI endpoints.
+
+  Validation before marking a change complete:
+  - pnpm format
+  - pnpm lint
+  - pnpm check-types
+  - For Web-facing changes, also run pnpm --filter web test and
+    pnpm --filter web build.
