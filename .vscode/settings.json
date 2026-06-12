@@ -2,7 +2,6 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit"
 	},
-	"editor.formatOnSave": true,
 	"editor.quickSuggestions": {
 		"strings": "on"
 	},
@@ -16,6 +15,8 @@
 		"**/.hg": true,
 		"**/.DS_Store": true,
 		"**/Thumbs.db": true,
+		".pnpm-store/": true,
+		".vite-hooks/": true,
 		"**/environments": true,
 		"**/.github": true,
 		"**/CVS": true,

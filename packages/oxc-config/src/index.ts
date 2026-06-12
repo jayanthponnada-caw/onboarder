@@ -27,13 +27,9 @@ export const baseFmt = {
 	useTabs: true,
 } satisfies OxfmtConfig
 
-export const webFmt = {
-	printWidth: 100,
-} satisfies OxfmtConfig
+export const webFmt = {} satisfies OxfmtConfig
 
-export const coreFmt = {
-	printWidth: 100,
-} satisfies OxfmtConfig
+export const coreFmt = {} satisfies OxfmtConfig
 
 export const baseLint = {
 	ignorePatterns: [...ignoredPaths],
