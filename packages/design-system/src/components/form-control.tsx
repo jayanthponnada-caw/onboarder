@@ -12,7 +12,6 @@ function Field({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
 
 function FieldLabel({ className, ...props }: React.ComponentPropsWithoutRef<"label">) {
 	return (
-		// biome-ignore lint/a11y/noLabelWithoutControl: FieldLabel is a reusable primitive; consumers provide htmlFor or wrap controls.
 		<label
 			data-slot="field-label"
 			className={cn("font-medium text-foreground text-sm", className)}

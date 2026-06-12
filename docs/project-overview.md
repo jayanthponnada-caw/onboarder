@@ -10,24 +10,24 @@ The project currently provides a **contract-first web and API workspace** with a
 
 The repository is organized as a monorepo with the following main applications and packages:
 
-* `apps/web` — authenticated onboarding UI built with TanStack Start and Clerk.
-* `apps/core` — secure API and orchestration service built with Hono, oRPC, and Drizzle.
-* Shared packages for API contracts, database access, design system components, infrastructure, and tooling.
+- `apps/web` — authenticated onboarding UI built with TanStack Start and Clerk.
+- `apps/core` — secure API and orchestration service built with Hono, oRPC, and Drizzle.
+- Shared packages for API contracts, database access, design system components, infrastructure, and tooling.
 
 ## Problem Statement
 
 Many small and medium-sized teams manage onboarding through scattered and manual tools such as:
 
-* spreadsheets for employee details and readiness tracking,
-* tickets for setup and access tasks,
-* email threads for approvals, handoffs, and status updates.
+- spreadsheets for employee details and readiness tracking,
+- tickets for setup and access tasks,
+- email threads for approvals, handoffs, and status updates.
 
 This usually leads to:
 
-* repeated manual mistakes,
-* unclear ownership,
-* slow coordination between HR, security, engineering, and operations,
-* poor visibility into onboarding progress.
+- repeated manual mistakes,
+- unclear ownership,
+- slow coordination between HR, security, engineering, and operations,
+- poor visibility into onboarding progress.
 
 Onboarder aims to centralize these workflows and provide a structured foundation for onboarding operations.
 
@@ -37,11 +37,11 @@ The first iteration focuses on one core domain: **user management**.
 
 This includes:
 
-* identity and user data management,
-* protected access through authentication,
-* a contract-driven API layer,
-* database-backed user creation and retrieval,
-* async-ready event emission for future workflow automation.
+- identity and user data management,
+- protected access through authentication,
+- a contract-driven API layer,
+- database-backed user creation and retrieval,
+- async-ready event emission for future workflow automation.
 
 Although the current domain is intentionally narrow, it is implemented end-to-end so future modules can follow the same architecture pattern.
 
@@ -51,12 +51,12 @@ The repository currently acts as a baseline onboarding control plane.
 
 It provides:
 
-* secure sign-in and protected workspace routes,
-* a user directory API with `list`, `get`, and `create` operations,
-* shared frontend and backend API contracts,
-* local-first user creation with optimistic UI updates,
-* `user/created` event emission for future automation,
-* clear package boundaries for adding new domains safely.
+- secure sign-in and protected workspace routes,
+- a user directory API with `list`, `get`, and `create` operations,
+- shared frontend and backend API contracts,
+- local-first user creation with optimistic UI updates,
+- `user/created` event emission for future automation,
+- clear package boundaries for adding new domains safely.
 
 ## Architecture Boundaries
 
@@ -64,19 +64,19 @@ It provides:
 
 The web application is responsible for:
 
-* route-level authentication gates,
-* frontend caching and query orchestration,
-* rendering screens and UI interactions,
-* user-facing workflows such as viewing and creating users.
+- route-level authentication gates,
+- frontend caching and query orchestration,
+- rendering screens and UI interactions,
+- user-facing workflows such as viewing and creating users.
 
 ### `apps/core`
 
 The core service is responsible for:
 
-* implementing API contract handlers,
-* coordinating persistence logic,
-* handling event side effects,
-* exposing API, health, OpenAPI, documentation, and Inngest endpoints.
+- implementing API contract handlers,
+- coordinating persistence logic,
+- handling event side effects,
+- exposing API, health, OpenAPI, documentation, and Inngest endpoints.
 
 ### `packages/api-contract`
 
@@ -84,9 +84,9 @@ This package owns the public API surface.
 
 It contains:
 
-* Zod request and response schemas,
-* shared procedure definitions,
-* contract types used by both frontend and backend.
+- Zod request and response schemas,
+- shared procedure definitions,
+- contract types used by both frontend and backend.
 
 This keeps the client and server aligned through a single contract source.
 
@@ -94,26 +94,26 @@ This keeps the client and server aligned through a single contract source.
 
 This package owns persistence-related code, including:
 
-* shared database schema,
-* Drizzle models,
-* database client helpers.
+- shared database schema,
+- Drizzle models,
+- database client helpers.
 
 ### `packages/design-system`
 
 This package contains reusable UI building blocks, including:
 
-* shared components,
-* style primitives,
-* design tokens.
+- shared components,
+- style primitives,
+- design tokens.
 
 ### `packages/infra`
 
 This package owns local development infrastructure, including:
 
-* Postgres setup,
-* Neon proxy configuration,
-* Inngest local development support,
-* startup scripts.
+- Postgres setup,
+- Neon proxy configuration,
+- Inngest local development support,
+- startup scripts.
 
 ## Operational Routes
 
@@ -153,15 +153,14 @@ New developers should explore the repository in this order:
 
 1. Start with `packages/api-contract` to understand the exposed API surface.
 2. Follow the contract usage in:
+   - `apps/web/src/lib/orpc.ts`
+   - `apps/core/src/orpc/router.ts`
 
-   * `apps/web/src/lib/orpc.ts`
-   * `apps/core/src/orpc/router.ts`
 3. Review the user route implementation in:
+   - `apps/web/src/routes/users.tsx`
 
-   * `apps/web/src/routes/users.tsx`
 4. Trace event side effects in:
-
-   * `apps/core/src/inngest/*`
+   - `apps/core/src/inngest/*`
 
 This reading path helps developers understand the contract-first architecture before modifying application code.
 
@@ -171,21 +170,21 @@ This reading path helps developers understand the contract-first architecture be
 
 The following features are already implemented:
 
-* authentication-gated web flow,
-* contract-backed user APIs,
-* database-backed `create`, `list`, and `get` operations,
-* user creation event emission,
-* local development startup flow.
+- authentication-gated web flow,
+- contract-backed user APIs,
+- database-backed `create`, `list`, and `get` operations,
+- user creation event emission,
+- local development startup flow.
 
 ### Not Yet Implemented
 
 The following areas are planned for future iterations:
 
-* onboarding task orchestration,
-* team and document handoff workflows,
-* SLA tracking,
-* onboarding state management,
-* escalation logic.
+- onboarding task orchestration,
+- team and document handoff workflows,
+- SLA tracking,
+- onboarding state management,
+- escalation logic.
 
 ## Local Development Startup
 

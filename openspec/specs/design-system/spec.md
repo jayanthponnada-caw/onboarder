@@ -7,6 +7,7 @@ workflow-oriented UI built on shadcn-compatible semantic tokens and reusable
 `@repo/design-system` components.
 
 ## Requirements
+
 ### Requirement: shadcn-compatible semantic token model
 
 The Design System SHALL define visual styling through shadcn-compatible

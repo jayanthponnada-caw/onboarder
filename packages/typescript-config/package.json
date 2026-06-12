@@ -1,14 +1,18 @@
 {
+	"name": "@repo/typescript-config",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
 	"exports": {
 		"./base.json": "./base.json",
 		"./cloudflare-worker.json": "./cloudflare-worker.json",
 		"./web.json": "./web.json"
 	},
-	"license": "MIT",
-	"name": "@repo/typescript-config",
-	"private": true,
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "0.0.0"
+	"scripts": {
+		"format": "vp fmt . --write",
+		"format:check": "vp fmt . --check"
+	}
 }

@@ -1,20 +1,84 @@
 {
-	"$schema": "https://turborepo.dev/schema.json",
+	"$schema": "https://turborepo.com/schema.json",
+	"globalDependencies": [
+		"package.json",
+		"pnpm-lock.yaml",
+		"pnpm-workspace.yaml",
+		"vite.config.ts",
+		"packages/oxc-config/src/**/*.ts",
+		"packages/typescript-config/*.json"
+	],
+	"globalEnv": ["NODE_ENV", "CI"],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": [".output/**"]
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env",
+				".env.*",
+				"!.wrangler/**",
+				"!dist/**",
+				"!.output/**",
+				"!node_modules/.nitro/**",
+				"!node_modules/.vite-temp/**",
+				"!coverage/**",
+				"!*.tsbuildinfo"
+			],
+			"outputs": [
+				"dist/**",
+				".output/**",
+				"node_modules/.nitro/**",
+				"node_modules/.vite-temp/**",
+				"!node_modules/.vite-temp/**/deps_temp_*/**"
+			],
+			"env": [
+				"API_ORIGIN",
+				"CLERK_*",
+				"DATABASE_URL",
+				"INNGEST_*",
+				"NEON_PROXY_PORT",
+				"SENTRY_*",
+				"VITE_*",
+				"WEB_ORIGIN"
+			]
+		},
+		"check": {
+			"dependsOn": ["format:check", "lint", "check-types"],
+			"outputs": []
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"]
+			"dependsOn": ["transit"],
+			"inputs": ["$TURBO_DEFAULT$", "!dist/**", "!*.tsbuildinfo"],
+			"outputs": []
 		},
 		"dev": {
+			"dependsOn": ["^build"],
 			"cache": false,
 			"persistent": true
 		},
+		"format": {
+			"cache": false,
+			"outputs": []
+		},
+		"format:check": {
+			"outputs": []
+		},
 		"lint": {
-			"dependsOn": ["^lint"]
+			"dependsOn": ["^build", "transit"],
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				"$TURBO_ROOT$/vite.config.ts",
+				"$TURBO_ROOT$/packages/oxc-config/src/**/*.ts"
+			],
+			"outputs": []
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", "!coverage/**"],
+			"outputs": ["coverage/**"]
+		},
+		"transit": {
+			"dependsOn": ["^transit"]
 		}
 	},
 	"ui": "tui"

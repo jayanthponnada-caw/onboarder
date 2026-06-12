@@ -1,0 +1,20 @@
+{
+	"name": "@repo/oxc-config",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit",
+		"format": "vp fmt . --write",
+		"format:check": "vp fmt . --check",
+		"lint": "vp lint . --type-aware --import-plugin"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"typescript": "^6.0.3",
+		"vite-plus": "catalog:"
+	}
+}

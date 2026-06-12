@@ -12,9 +12,11 @@ type UsersDbIslandProps = {
 export function UsersDbIsland({ initialUsers }: UsersDbIslandProps) {
 	const db = useAppDb()
 
-	const { data: users = [...initialUsers] } = useLiveQuery((query) =>
+	const { data: liveUsers } = useLiveQuery((query) =>
 		query.from({ user: db.users }).orderBy(({ user }) => user.id, "asc"),
 	)
+
+	const users = liveUsers.length > 0 ? liveUsers : initialUsers
 
 	return (
 		<UsersList

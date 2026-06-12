@@ -1,4 +1,19 @@
 {
+	"name": "@repo/api-contract",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./contracts": "./src/contracts/index.ts",
+		"./schemas": "./src/schemas/index.ts"
+	},
+	"scripts": {
+		"build": "tsc -b",
+		"check-types": "tsc -b",
+		"format": "vp fmt . --write",
+		"format:check": "vp fmt . --check",
+		"lint": "vp lint . --type-aware --import-plugin"
+	},
 	"dependencies": {
 		"@orpc/contract": "1.14.3",
 		"zod": "^3.25.76"
@@ -6,18 +21,5 @@
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
 		"typescript": "^6.0.3"
-	},
-	"exports": {
-		".": "./src/index.ts",
-		"./contracts": "./src/contracts/index.ts",
-		"./schemas": "./src/schemas/index.ts"
-	},
-	"name": "@repo/api-contract",
-	"private": true,
-	"scripts": {
-		"check-types": "tsc -b",
-		"lint": "biome check .",
-		"typecheck": "pnpm check-types"
-	},
-	"type": "module"
+	}
 }

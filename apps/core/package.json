@@ -1,4 +1,17 @@
 {
+	"name": "core",
+	"type": "module",
+	"scripts": {
+		"build": "vp build",
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"check-types": "tsc --noEmit",
+		"deploy": "vp build && wrangler deploy",
+		"dev": "vp dev --port 3001",
+		"format": "vp fmt . --write",
+		"format:check": "vp fmt . --check",
+		"lint": "vp lint . --type-aware --import-plugin",
+		"preview": "vp preview"
+	},
 	"dependencies": {
 		"@clerk/backend": "^3.4.14",
 		"@clerk/hono": "^0.1.32",
@@ -14,16 +27,11 @@
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {
+		"@cloudflare/vite-plugin": "^1.40.1",
+		"@repo/oxc-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"wrangler": "^4.4.0"
-	},
-	"name": "core",
-	"scripts": {
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
-		"check-types": "tsc --noEmit",
-		"deploy": "wrangler deploy --minify",
-		"dev": "wrangler dev --port 3001",
-		"lint": "biome check ."
-	},
-	"type": "module"
+		"vite": "catalog:",
+		"vite-plus": "catalog:",
+		"wrangler": "^4.99.0"
+	}
 }

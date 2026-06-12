@@ -47,20 +47,20 @@ theme changes underneath them.
 
 Required shadcn token groups:
 
-| Token group | Purpose |
-| --- | --- |
-| `background`, `foreground` | Page canvas and default text. |
-| `card`, `card-foreground` | Panels, cards, dashboard sections, task surfaces. |
-| `popover`, `popover-foreground` | Menus, popovers, command surfaces, overlays. |
-| `primary`, `primary-foreground` | Main actions, selected state, brand/focus accent. |
-| `secondary`, `secondary-foreground` | Secondary buttons, subtle tabs, secondary badges. |
-| `muted`, `muted-foreground` | Secondary surfaces, disabled-adjacent copy, quiet metadata. |
-| `accent`, `accent-foreground` | Hovered navigation and low-emphasis interactive states. |
-| `destructive` | Destructive actions and validation failure. |
-| `border`, `input`, `ring` | Hairline borders, form outlines, focus rings. |
-| `sidebar-*` | App shell and workflow navigation. |
-| `chart-*` | Reporting and dashboard visuals. |
-| `radius` and derived radii | Consistent shadcn radius scale. |
+| Token group                         | Purpose                                                     |
+| ----------------------------------- | ----------------------------------------------------------- |
+| `background`, `foreground`          | Page canvas and default text.                               |
+| `card`, `card-foreground`           | Panels, cards, dashboard sections, task surfaces.           |
+| `popover`, `popover-foreground`     | Menus, popovers, command surfaces, overlays.                |
+| `primary`, `primary-foreground`     | Main actions, selected state, brand/focus accent.           |
+| `secondary`, `secondary-foreground` | Secondary buttons, subtle tabs, secondary badges.           |
+| `muted`, `muted-foreground`         | Secondary surfaces, disabled-adjacent copy, quiet metadata. |
+| `accent`, `accent-foreground`       | Hovered navigation and low-emphasis interactive states.     |
+| `destructive`                       | Destructive actions and validation failure.                 |
+| `border`, `input`, `ring`           | Hairline borders, form outlines, focus rings.               |
+| `sidebar-*`                         | App shell and workflow navigation.                          |
+| `chart-*`                           | Reporting and dashboard visuals.                            |
+| `radius` and derived radii          | Consistent shadcn radius scale.                             |
 
 Extra design-language names may be used in documentation, such as `canvas`,
 `surface-1`, `surface-2`, and `surface-3`, but future code should map those
@@ -71,12 +71,12 @@ new custom CSS variables exposed through `@theme inline`.
 
 These are starting points for future visual review, not implemented values.
 
-| Role | Candidate |
-| --- | --- |
-| Dark `primary` / `ring` yellow | `oklch(0.78 0.16 92)` |
-| Dark `primary-foreground` | A near-black foreground, not white. |
-| Light text/link yellow | `oklch(0.55 0.13 88)` |
-| Light yellow-filled controls | Use dark foreground text. |
+| Role                           | Candidate                           |
+| ------------------------------ | ----------------------------------- |
+| Dark `primary` / `ring` yellow | `oklch(0.78 0.16 92)`               |
+| Dark `primary-foreground`      | A near-black foreground, not white. |
+| Light text/link yellow         | `oklch(0.55 0.13 88)`               |
+| Light yellow-filled controls   | Use dark foreground text.           |
 
 The dark primary candidate was chosen because it reads as yellow against a
 near-black canvas while leaving enough contrast for dark text on filled yellow

@@ -79,29 +79,29 @@ packages/design-system/src/styles/globals.css
 
 Use these shadcn token groups as the stable contract:
 
-| Token | Dark-first role | Light fallback role |
-| --- | --- | --- |
-| `background` | Near-black product canvas | White or off-white canvas |
-| `foreground` | Primary readable text | Primary dark text |
-| `card` | Charcoal panel surface | White or neutral panel |
-| `card-foreground` | Primary panel text | Primary panel text |
-| `popover` | Lifted menu/dialog surface | Light lifted surface |
-| `popover-foreground` | Popover text | Popover text |
-| `primary` | Yellow brand/action accent | Darker accessible yellow |
-| `primary-foreground` | Near-black text on yellow | Near-black text on yellow |
-| `secondary` | Subtle neutral control surface | Subtle neutral control surface |
-| `secondary-foreground` | Secondary control text | Secondary control text |
-| `muted` | Quiet surface and metadata background | Quiet neutral surface |
-| `muted-foreground` | Low-emphasis text | Low-emphasis text with contrast |
-| `accent` | Hovered nav and selected subtle surfaces | Hovered nav and selected subtle surfaces |
-| `accent-foreground` | Accent surface text | Accent surface text |
-| `destructive` | Destructive action and validation | Destructive action and validation |
-| `border` | Hairline panel separation | Neutral border |
-| `input` | Form control border/background | Form control border/background |
-| `ring` | Focus ring, derived from yellow | Focus ring, derived from accessible yellow |
-| `sidebar-*` | App shell navigation | App shell fallback |
-| `chart-*` | Dashboard reporting colors | Dashboard reporting colors |
-| `radius` | Base radius for shadcn components | Same radius contract |
+| Token                  | Dark-first role                          | Light fallback role                        |
+| ---------------------- | ---------------------------------------- | ------------------------------------------ |
+| `background`           | Near-black product canvas                | White or off-white canvas                  |
+| `foreground`           | Primary readable text                    | Primary dark text                          |
+| `card`                 | Charcoal panel surface                   | White or neutral panel                     |
+| `card-foreground`      | Primary panel text                       | Primary panel text                         |
+| `popover`              | Lifted menu/dialog surface               | Light lifted surface                       |
+| `popover-foreground`   | Popover text                             | Popover text                               |
+| `primary`              | Yellow brand/action accent               | Darker accessible yellow                   |
+| `primary-foreground`   | Near-black text on yellow                | Near-black text on yellow                  |
+| `secondary`            | Subtle neutral control surface           | Subtle neutral control surface             |
+| `secondary-foreground` | Secondary control text                   | Secondary control text                     |
+| `muted`                | Quiet surface and metadata background    | Quiet neutral surface                      |
+| `muted-foreground`     | Low-emphasis text                        | Low-emphasis text with contrast            |
+| `accent`               | Hovered nav and selected subtle surfaces | Hovered nav and selected subtle surfaces   |
+| `accent-foreground`    | Accent surface text                      | Accent surface text                        |
+| `destructive`          | Destructive action and validation        | Destructive action and validation          |
+| `border`               | Hairline panel separation                | Neutral border                             |
+| `input`                | Form control border/background           | Form control border/background             |
+| `ring`                 | Focus ring, derived from yellow          | Focus ring, derived from accessible yellow |
+| `sidebar-*`            | App shell navigation                     | App shell fallback                         |
+| `chart-*`              | Dashboard reporting colors               | Dashboard reporting colors                 |
+| `radius`               | Base radius for shadcn components        | Same radius contract                       |
 
 Documented design aliases such as `canvas`, `surface-1`, `surface-2`, and
 `surface-3` are allowed in prose, but code should first map them onto shadcn
@@ -112,12 +112,12 @@ make the semantic mapping insufficient.
 
 These values are starting defaults for future implementation and visual review:
 
-| Usage | Candidate |
-| --- | --- |
-| Dark primary and focus yellow | `oklch(0.78 0.16 92)` |
-| Dark yellow-filled foreground | Near-black text |
-| Light text/link yellow | `oklch(0.55 0.13 88)` |
-| Light yellow-filled foreground | Near-black text |
+| Usage                          | Candidate             |
+| ------------------------------ | --------------------- |
+| Dark primary and focus yellow  | `oklch(0.78 0.16 92)` |
+| Dark yellow-filled foreground  | Near-black text       |
+| Light text/link yellow         | `oklch(0.55 0.13 88)` |
+| Light yellow-filled foreground | Near-black text       |
 
 Reasoning:
 
@@ -151,17 +151,17 @@ Guidance:
 
 Prioritize components that Onboarder's onboarding workflows need:
 
-| Area | Guidance |
-| --- | --- |
-| App shell | Dark sidebar, active yellow state, quiet separators, stable header. |
-| Navigation | Use semantic selected, hover, and focus states. |
-| Buttons | Primary yellow, neutral secondary, ghost for low-emphasis actions, destructive separate. |
-| Forms | Clear labels, descriptions, validation, grouped fields, visible focus. |
-| Cards and panels | Surface ladder and hairline borders instead of heavy shadows. |
-| Tables and lists | Dense rows, scan-friendly metadata, stable hover and selected states. |
-| Task states | Semantic badges for pending, in-progress, done, overdue, blocked. |
-| Dialogs and sheets | High-contrast titles, clear actions, keyboard accessible controls. |
-| Empty/loading/error | Use shadcn-style Empty, Skeleton, Alert, and semantic feedback patterns. |
+| Area                | Guidance                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| App shell           | Dark sidebar, active yellow state, quiet separators, stable header.                      |
+| Navigation          | Use semantic selected, hover, and focus states.                                          |
+| Buttons             | Primary yellow, neutral secondary, ghost for low-emphasis actions, destructive separate. |
+| Forms               | Clear labels, descriptions, validation, grouped fields, visible focus.                   |
+| Cards and panels    | Surface ladder and hairline borders instead of heavy shadows.                            |
+| Tables and lists    | Dense rows, scan-friendly metadata, stable hover and selected states.                    |
+| Task states         | Semantic badges for pending, in-progress, done, overdue, blocked.                        |
+| Dialogs and sheets  | High-contrast titles, clear actions, keyboard accessible controls.                       |
+| Empty/loading/error | Use shadcn-style Empty, Skeleton, Alert, and semantic feedback patterns.                 |
 
 Do not prioritize marketing components in this slice:
 

@@ -65,11 +65,8 @@ Only do it later if both apps own genuinely different function domains:
 
 ```json
 {
-  "sdk-url": [
-    "http://localhost:3001/inngest",
-    "http://localhost:3000/inngest"
-  ],
-  "no-discovery": true
+	"sdk-url": ["http://localhost:3001/inngest", "http://localhost:3000/inngest"],
+	"no-discovery": true
 }
 ```
 
@@ -132,28 +129,28 @@ Create `packages/infra/package.json`:
 
 ```json
 {
-  "name": "@repo/infra",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "setup": "tsx scripts/setup.ts",
-    "check": "tsx scripts/check.ts",
-    "reset": "tsx scripts/reset.ts",
-    "up": "tsx scripts/setup.ts --up-only",
-    "down": "docker compose --env-file .env -f compose.yaml down",
-    "down:volumes": "docker compose --env-file .env -f compose.yaml down -v",
-    "logs": "docker compose --env-file .env -f compose.yaml logs -f",
-    "ps": "docker compose --env-file .env -f compose.yaml ps",
-    "db:up": "docker compose --env-file .env -f compose.yaml up -d postgres neon-proxy",
-    "db:logs": "docker compose --env-file .env -f compose.yaml logs -f postgres neon-proxy",
-    "inngest:up": "docker compose --env-file .env -f compose.yaml up -d inngest",
-    "inngest:logs": "docker compose --env-file .env -f compose.yaml logs -f inngest",
-    "scrap": "tsx scripts/scrap-local-infra.ts"
-  },
-  "devDependencies": {
-    "tsx": "latest",
-    "typescript": "latest"
-  }
+	"name": "@repo/infra",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"setup": "tsx scripts/setup.ts",
+		"check": "tsx scripts/check.ts",
+		"reset": "tsx scripts/reset.ts",
+		"up": "tsx scripts/setup.ts --up-only",
+		"down": "docker compose --env-file .env -f compose.yaml down",
+		"down:volumes": "docker compose --env-file .env -f compose.yaml down -v",
+		"logs": "docker compose --env-file .env -f compose.yaml logs -f",
+		"ps": "docker compose --env-file .env -f compose.yaml ps",
+		"db:up": "docker compose --env-file .env -f compose.yaml up -d postgres neon-proxy",
+		"db:logs": "docker compose --env-file .env -f compose.yaml logs -f postgres neon-proxy",
+		"inngest:up": "docker compose --env-file .env -f compose.yaml up -d inngest",
+		"inngest:logs": "docker compose --env-file .env -f compose.yaml logs -f inngest",
+		"scrap": "tsx scripts/scrap-local-infra.ts"
+	},
+	"devDependencies": {
+		"tsx": "latest",
+		"typescript": "latest"
+	}
 }
 ```
 
@@ -161,20 +158,20 @@ Add root scripts in root `package.json`:
 
 ```json
 {
-  "scripts": {
-    "infra:setup": "pnpm --filter @repo/infra run setup",
-    "infra:check": "pnpm --filter @repo/infra run check",
-    "infra:reset": "pnpm --filter @repo/infra run reset",
-    "infra:scrap": "pnpm --filter @repo/infra run scrap",
-    "infra:up": "pnpm --filter @repo/infra run up",
-    "infra:down": "pnpm --filter @repo/infra run down",
-    "infra:logs": "pnpm --filter @repo/infra run logs",
-    "infra:ps": "pnpm --filter @repo/infra run ps",
-    "db:up": "pnpm --filter @repo/infra run db:up",
-    "db:logs": "pnpm --filter @repo/infra run db:logs",
-    "inngest:up": "pnpm --filter @repo/infra run inngest:up",
-    "inngest:logs": "pnpm --filter @repo/infra run inngest:logs"
-  }
+	"scripts": {
+		"infra:setup": "pnpm --filter @repo/infra run setup",
+		"infra:check": "pnpm --filter @repo/infra run check",
+		"infra:reset": "pnpm --filter @repo/infra run reset",
+		"infra:scrap": "pnpm --filter @repo/infra run scrap",
+		"infra:up": "pnpm --filter @repo/infra run up",
+		"infra:down": "pnpm --filter @repo/infra run down",
+		"infra:logs": "pnpm --filter @repo/infra run logs",
+		"infra:ps": "pnpm --filter @repo/infra run ps",
+		"db:up": "pnpm --filter @repo/infra run db:up",
+		"db:logs": "pnpm --filter @repo/infra run db:logs",
+		"inngest:up": "pnpm --filter @repo/infra run inngest:up",
+		"inngest:logs": "pnpm --filter @repo/infra run inngest:logs"
+	}
 }
 ```
 
@@ -301,50 +298,50 @@ import { resolve } from "node:path"
 export const root = resolve(import.meta.dirname, "..")
 
 export function log(message: string) {
-  console.log(`[infra] ${message}`)
+	console.log(`[infra] ${message}`)
 }
 
 export function ok(message: string) {
-  console.log(`[infra] ok: ${message}`)
+	console.log(`[infra] ok: ${message}`)
 }
 
 export function warn(message: string) {
-  console.warn(`[infra] warn: ${message}`)
+	console.warn(`[infra] warn: ${message}`)
 }
 
 export function fail(message: string): never {
-  console.error(`[infra] error: ${message}`)
-  process.exit(1)
+	console.error(`[infra] error: ${message}`)
+	process.exit(1)
 }
 
 export function ensureEnvFile() {
-  const env = resolve(root, ".env")
-  const example = resolve(root, ".env.example")
+	const env = resolve(root, ".env")
+	const example = resolve(root, ".env.example")
 
-  if (!existsSync(env)) {
-    if (!existsSync(example)) fail("missing packages/infra/.env.example")
-    copyFileSync(example, env)
-    ok("created packages/infra/.env from .env.example")
-  } else {
-    ok("packages/infra/.env exists")
-  }
+	if (!existsSync(env)) {
+		if (!existsSync(example)) fail("missing packages/infra/.env.example")
+		copyFileSync(example, env)
+		ok("created packages/infra/.env from .env.example")
+	} else {
+		ok("packages/infra/.env exists")
+	}
 }
 
 export function run(command: string, args: string[], options: { cwd?: string } = {}) {
-  log(`running: ${command} ${args.join(" ")}`)
+	log(`running: ${command} ${args.join(" ")}`)
 
-  return new Promise<void>((resolvePromise, reject) => {
-    const child = spawn(command, args, {
-      cwd: options.cwd ?? root,
-      shell: process.platform === "win32",
-      stdio: "inherit",
-    })
+	return new Promise<void>((resolvePromise, reject) => {
+		const child = spawn(command, args, {
+			cwd: options.cwd ?? root,
+			shell: process.platform === "win32",
+			stdio: "inherit",
+		})
 
-    child.on("exit", (code) => {
-      if (code === 0) resolvePromise()
-      else reject(new Error(`${command} ${args.join(" ")} failed with exit code ${code}`))
-    })
-  })
+		child.on("exit", (code) => {
+			if (code === 0) resolvePromise()
+			else reject(new Error(`${command} ${args.join(" ")} failed with exit code ${code}`))
+		})
+	})
 }
 ```
 
@@ -356,22 +353,36 @@ import { ensureEnvFile, fail, log, ok, root, run } from "./utils"
 const upOnly = process.argv.includes("--up-only")
 
 async function main() {
-  log("starting local infrastructure setup")
-  ensureEnvFile()
+	log("starting local infrastructure setup")
+	ensureEnvFile()
 
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "pull"])
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "up", "-d"])
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "pull"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "up", "-d"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
 
-  if (!upOnly) {
-    log("validating service endpoints")
-    await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "exec", "-T", "postgres", "pg_isready", "-U", "postgres", "-d", "main"])
-  }
+	if (!upOnly) {
+		log("validating service endpoints")
+		await run("docker", [
+			"compose",
+			"--env-file",
+			".env",
+			"-f",
+			"compose.yaml",
+			"exec",
+			"-T",
+			"postgres",
+			"pg_isready",
+			"-U",
+			"postgres",
+			"-d",
+			"main",
+		])
+	}
 
-  ok("Postgres is available on localhost:5432")
-  ok("Neon local proxy is available on localhost:4444")
-  ok("Inngest UI is available on http://localhost:8288")
-  ok("use DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main")
+	ok("Postgres is available on localhost:5432")
+	ok("Neon local proxy is available on localhost:4444")
+	ok("Inngest UI is available on http://localhost:8288")
+	ok("use DATABASE_URL=postgres://postgres:postgres@db.localtest.me:5432/main")
 }
 
 main().catch((error) => fail(error instanceof Error ? error.message : String(error)))
@@ -383,13 +394,27 @@ Create `packages/infra/scripts/check.ts`:
 import { ensureEnvFile, fail, log, ok, run } from "./utils"
 
 async function main() {
-  log("checking local infrastructure")
-  ensureEnvFile()
+	log("checking local infrastructure")
+	ensureEnvFile()
 
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "exec", "-T", "postgres", "pg_isready", "-U", "postgres", "-d", "main"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
+	await run("docker", [
+		"compose",
+		"--env-file",
+		".env",
+		"-f",
+		"compose.yaml",
+		"exec",
+		"-T",
+		"postgres",
+		"pg_isready",
+		"-U",
+		"postgres",
+		"-d",
+		"main",
+	])
 
-  ok("infrastructure check complete")
+	ok("infrastructure check complete")
 }
 
 main().catch((error) => fail(error instanceof Error ? error.message : String(error)))
@@ -401,14 +426,14 @@ Create `packages/infra/scripts/reset.ts`:
 import { ensureEnvFile, fail, log, ok, run } from "./utils"
 
 async function main() {
-  log("resetting local infrastructure and deleting volumes")
-  ensureEnvFile()
+	log("resetting local infrastructure and deleting volumes")
+	ensureEnvFile()
 
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "down", "-v"])
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "up", "-d"])
-  await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "down", "-v"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "up", "-d"])
+	await run("docker", ["compose", "--env-file", ".env", "-f", "compose.yaml", "ps"])
 
-  ok("local infrastructure reset complete")
+	ok("local infrastructure reset complete")
 }
 
 main().catch((error) => fail(error instanceof Error ? error.message : String(error)))
@@ -434,32 +459,32 @@ Create/modify `packages/db/package.json`:
 
 ```json
 {
-  "name": "@repo/db",
-  "private": true,
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./schema": "./src/schema/index.ts"
-  },
-  "scripts": {
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
-  },
-  "dependencies": {
-    "@neondatabase/serverless": "latest",
-    "drizzle-orm": "latest",
-    "dotenv": "latest",
-    "ws": "latest"
-  },
-  "devDependencies": {
-    "@types/ws": "latest",
-    "bufferutil": "latest",
-    "drizzle-kit": "latest",
-    "postgres": "latest",
-    "typescript": "latest"
-  }
+	"name": "@repo/db",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./schema": "./src/schema/index.ts"
+	},
+	"scripts": {
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "latest",
+		"drizzle-orm": "latest",
+		"dotenv": "latest",
+		"ws": "latest"
+	},
+	"devDependencies": {
+		"@types/ws": "latest",
+		"bufferutil": "latest",
+		"drizzle-kit": "latest",
+		"postgres": "latest",
+		"typescript": "latest"
+	}
 }
 ```
 
@@ -472,12 +497,12 @@ import { defineConfig } from "drizzle-kit"
 config({ path: ".env" })
 
 export default defineConfig({
-  schema: "./src/schema/index.ts",
-  out: "./drizzle",
-  dialect: "postgresql",
-  dbCredentials: {
-    url: process.env.DATABASE_URL!,
-  },
+	schema: "./src/schema/index.ts",
+	out: "./drizzle",
+	dialect: "postgresql",
+	dbCredentials: {
+		url: process.env.DATABASE_URL!,
+	},
 })
 ```
 
@@ -488,28 +513,28 @@ import { neonConfig } from "@neondatabase/serverless"
 import ws from "ws"
 
 export function configureNeon() {
-  const connectionString = process.env.DATABASE_URL
+	const connectionString = process.env.DATABASE_URL
 
-  if (!connectionString) {
-    throw new Error("DATABASE_URL is not set")
-  }
+	if (!connectionString) {
+		throw new Error("DATABASE_URL is not set")
+	}
 
-  const url = new URL(connectionString)
-  const isLocalNeonProxy = url.hostname === "db.localtest.me"
+	const url = new URL(connectionString)
+	const isLocalNeonProxy = url.hostname === "db.localtest.me"
 
-  if (isLocalNeonProxy) {
-    neonConfig.fetchEndpoint = (host) => {
-      const [protocol, port] = host === "db.localtest.me" ? ["http", 4444] : ["https", 443]
-      return `${protocol}://${host}:${port}/sql`
-    }
+	if (isLocalNeonProxy) {
+		neonConfig.fetchEndpoint = (host) => {
+			const [protocol, port] = host === "db.localtest.me" ? ["http", 4444] : ["https", 443]
+			return `${protocol}://${host}:${port}/sql`
+		}
 
-    neonConfig.useSecureWebSocket = false
-    neonConfig.wsProxy = (host) => (host === "db.localtest.me" ? `${host}:4444/v2` : `${host}/v2`)
-  }
+		neonConfig.useSecureWebSocket = false
+		neonConfig.wsProxy = (host) => (host === "db.localtest.me" ? `${host}:4444/v2` : `${host}/v2`)
+	}
 
-  neonConfig.webSocketConstructor = ws
+	neonConfig.webSocketConstructor = ws
 
-  return connectionString
+	return connectionString
 }
 ```
 
@@ -549,11 +574,11 @@ Create `packages/db/src/schema/users.ts`:
 import { integer, pgTable, timestamp, varchar } from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
-  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 320 }).notNull().unique(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+	name: varchar("name", { length: 255 }).notNull(),
+	email: varchar("email", { length: 320 }).notNull().unique(),
+	createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
 ```
 
@@ -589,8 +614,8 @@ const app = new Hono()
 app.get("/health", (c) => c.json({ ok: true }))
 
 app.get("/db/health", async (c) => {
-  const result = await db.execute("select 1 as ok")
-  return c.json({ ok: true, result })
+	const result = await db.execute("select 1 as ok")
+	return c.json({ ok: true, result })
 })
 
 export default app
@@ -602,8 +627,8 @@ If using Node serve mode:
 import { serve } from "@hono/node-server"
 
 serve({
-  fetch: app.fetch,
-  port: Number(process.env.HONO_API_PORT ?? 3001),
+	fetch: app.fetch,
+	port: Number(process.env.HONO_API_PORT ?? 3001),
 })
 ```
 
@@ -621,7 +646,7 @@ Create `apps/core/src/inngest/client.ts`:
 import { Inngest } from "inngest"
 
 export const inngest = new Inngest({
-  id: "onboarder-core",
+	id: "onboarder-core",
 })
 ```
 
@@ -631,15 +656,15 @@ Create `apps/core/src/inngest/functions.ts`:
 import { inngest } from "./client"
 
 export const testFunction = inngest.createFunction(
-  { id: "test-function" },
-  { event: "test/created" },
-  async ({ event, step }) => {
-    await step.run("log-event", async () => {
-      console.log("received event", event.data)
-    })
+	{ id: "test-function" },
+	{ event: "test/created" },
+	async ({ event, step }) => {
+		await step.run("log-event", async () => {
+			console.log("received event", event.data)
+		})
 
-    return { ok: true }
-  },
+		return { ok: true }
+	},
 )
 ```
 
@@ -652,9 +677,9 @@ import { inngest } from "./client"
 import { testFunction } from "./functions"
 
 export const inngestHandler = serve({
-  client: inngest,
-  functions: [testFunction],
-  servePath: "/inngest",
+	client: inngest,
+	functions: [testFunction],
+	servePath: "/inngest",
 })
 
 export { inngest }
@@ -666,7 +691,7 @@ Mount in `apps/core/src/index.ts`:
 import { inngestHandler } from "./inngest"
 
 app.on(["GET", "POST", "PUT"], "/inngest", (c) => {
-  return inngestHandler(c)
+	return inngestHandler(c)
 })
 ```
 
@@ -682,8 +707,8 @@ Expected diagnostic shape:
 
 ```json
 {
-  "message": "Inngest endpoint configured correctly.",
-  "functionsFound": 1
+	"message": "Inngest endpoint configured correctly.",
+	"functionsFound": 1
 }
 ```
 

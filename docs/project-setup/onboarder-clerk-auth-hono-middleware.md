@@ -59,12 +59,12 @@ const app = new Hono()
 app.use("/api/*", clerkMiddleware())
 
 app.get("/auth/health", (c) => {
-  const auth = getAuth(c, { acceptsToken: "session_token" })
+	const auth = getAuth(c, { acceptsToken: "session_token" })
 
-  return c.json({
-    ok: true,
-    userId: auth.userId,
-  })
+	return c.json({
+		ok: true,
+		userId: auth.userId,
+	})
 })
 ```
 

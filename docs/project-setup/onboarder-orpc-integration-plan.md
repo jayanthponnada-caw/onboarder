@@ -135,16 +135,16 @@ Example:
 
 ```ts
 export const usersContract = {
-  list: oc
-    .route({
-      method: "GET",
-      operationId: "listUsers",
-      path: "/users",
-      summary: "List users",
-      tags: ["Users"],
-    })
-    .input(ListUsersInputSchema)
-    .output(z.array(UserSchema)),
+	list: oc
+		.route({
+			method: "GET",
+			operationId: "listUsers",
+			path: "/users",
+			summary: "List users",
+			tags: ["Users"],
+		})
+		.input(ListUsersInputSchema)
+		.output(z.array(UserSchema)),
 }
 ```
 

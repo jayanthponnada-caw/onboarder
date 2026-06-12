@@ -1,6 +1,9 @@
 <!-- intent-skills:start -->
-# Skill mappings - load `use` with `pnpm dlx @tanstack/intent@latest load <use>`.
+
+# Skill mappings - load `use` with `vp dlx @tanstack/intent@latest load <use>`.
+
 skills:
+
   - when: "Install TanStack Devtools, pick framework adapter (React/Vue/Solid/Preact), register plugins via plugins prop, configure shell (position, hotkeys, theme, hideUntilHover, requireUrlFlag, eventBusConfig). TanStackDevtools component, defaultOpen, localStorage persistence."
     use: "@tanstack/devtools#devtools-app-setup"
   - when: "Publish plugin to npm and submit to TanStack Devtools Marketplace. PluginMetadata registry format, plugin-registry.ts, pluginImport (importName, type), requires (packageName, minVersion), framework tagging, multi-framework submissions, featured plugins."
@@ -70,14 +73,17 @@ skills:
 <!-- intent-skills:end -->
 
 <!-- agent-runtime:start -->
+
 - Before ending a response in this repository, run:
-  - `pnpm format`
-  - `pnpm lint`
-  - `pnpm check-types`
+  - `vp fmt . --write`
+  - `vp lint . --type-aware --import-plugin`
+  - `vp run -r check-types`
+  - compatibility aliases: `pnpm format`, `pnpm lint`, and `pnpm check-types`
   - resolve/fix any reported issues and re-run until clean.
 <!-- agent-runtime:end -->
 
 <!-- agent-commits:start -->
+
 # Commit message convention
 
 Agents should use Conventional Commit style for every commit message:
@@ -101,9 +107,11 @@ feat(repo): scaffold onboarder monorepo
 docs(api): document hono orpc openapi routing
 fix(core): move inngest off api namespace
 ```
+
 <!-- agent-commits:end -->
 
 <!-- agent-standards:start -->
+
 # Onboarder agent standards
 
 Use these rules as the repo-wide baseline. Child `AGENTS.md` files may tighten them for a specific app or package.
@@ -114,6 +122,7 @@ Use these rules as the repo-wide baseline. Child `AGENTS.md` files may tighten t
 - Keep changes limited to the request and the touched app or package.
 - Prefer current repo state over assumptions. Check nearby code, package scripts, and existing docs before changing behavior.
 - Use Windows and PowerShell-friendly commands. Do not rely on Unix-only command examples.
+- Use Vite+ commands by default: `vp install`, `vp add`, `vp remove`, `vp dlx`, `vp run`, `vp check`, `vp fmt`, `vp lint`, `vp test`, and `vp build`. Use `vp pm <command>` only when package-manager-specific behavior is required.
 - Ask before adding dependencies, changing public contracts, changing auth behavior, moving boundaries, or editing deployment/runtime configuration.
 - Never edit secrets in `.env*` files unless explicitly requested.
 
@@ -176,10 +185,14 @@ Code in this repo should prefer declarative and functional structure by default.
 Before ending a response in this repository, run:
 
 ```powershell
+vp fmt . --write
+vp lint . --type-aware --import-plugin
+vp run -r check-types
 pnpm format
 pnpm lint
 pnpm check-types
 ```
 
 Resolve reported issues and re-run until clean. If a command cannot be run, explain why.
+
 <!-- agent-standards:end -->

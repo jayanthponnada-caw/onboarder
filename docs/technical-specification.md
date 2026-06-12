@@ -44,11 +44,13 @@ flowchart LR
 ### 1) Contract-first API (`@orpc/contract`, `packages/api-contract`)
 
 Why:
+
 - Prevents drift between web and API code.
 - Enforces request/response shapes with Zod at the edge.
 - Gives OpenAPI generation for docs and tooling.
 
 How it is set up:
+
 - `packages/api-contract/src/contracts/users.ts` defines all user procedures.
 - `packages/api-contract/src/contracts/index.ts` exports `contract` as the app-wide source.
 - `packages/api-contract/src/index.ts` exports `AppClient` typed client shape from `ContractRouterClient`.
@@ -57,28 +59,31 @@ Example:
 
 ```ts
 export const usersContract = {
-  byId: oc
-    .route({ method: "GET", path: "/users/{id}" })
-    .input(UserByIdInputSchema)
-    .output(UserSchema.nullable()),
-  create: oc
-    .route({ method: "POST", path: "/users" })
-    .input(CreateUserInputSchema)
-    .output(UserSchema),
+	byId: oc
+		.route({ method: "GET", path: "/users/{id}" })
+		.input(UserByIdInputSchema)
+		.output(UserSchema.nullable()),
+	create: oc
+		.route({ method: "POST", path: "/users" })
+		.input(CreateUserInputSchema)
+		.output(UserSchema),
 }
 ```
 
 Why this matters now:
+
 - Every place reading users (`users/route`, API handlers, and Inngest payloads) can stay type-safe under one contract object.
 
 ### 2) Web shell and routing (`@tanstack/react-start`, `@tanstack/react-router`)
 
 Why:
+
 - SSR + client transitions are in one app.
 - Route tree is generated with strongly typed route metadata.
 - Supports preload + query hydration for fast route-level data.
 
 How it is set up:
+
 - `apps/web/src/start.ts` applies Clerk middleware to server request handling.
 - `apps/web/src/router.tsx` builds the TanStack Router and links QueryClient defaults.
 - `apps/web/src/routes/__root.tsx` wires root document structure and devtools.
@@ -88,19 +93,21 @@ Example:
 
 ```ts
 export const Route = createFileRoute("/users")({
-  beforeLoad: () => requireAuth(),
-  loader: ({ context }) => context.queryClient.ensureQueryData(usersListQuery),
-  component: UsersPage,
+	beforeLoad: () => requireAuth(),
+	loader: ({ context }) => context.queryClient.ensureQueryData(usersListQuery),
+	component: UsersPage,
 })
 ```
 
 ### 3) Typed API transport in web (`@orpc/client`, `@orpc/openapi-client`)
 
 Why:
+
 - Same transport is used for browser and SSR.
 - Automatically injects Clerk token on browser calls and server request headers for SSR.
 
 How it is set up:
+
 - `apps/web/src/lib/orpc.ts` creates a single `client` using `createIsomorphicFn`.
 - Browser client injects `Authorization: Bearer <clerk-token>`.
 - SSR client injects request headers via `getRequestHeaders()`.
@@ -109,27 +116,36 @@ Example:
 
 ```ts
 const getLink = createIsomorphicFn()
-  .client(() =>
-    new OpenAPILink(contract, {
-      fetch: async (request, init) => {
-        const token = await getClerkToken()
-        const headers = new Headers(init?.headers)
-        if (token) headers.set("Authorization", `Bearer ${token}`)
-        return fetch(request, { ...init, headers })
-      },
-      url: `${env.VITE_API_ORIGIN}/api`,
-    }),
-  )
-  .server(() => new OpenAPILink(contract, { headers: () => getRequestHeaders(), url: `${env.API_ORIGIN}/api` }))
+	.client(
+		() =>
+			new OpenAPILink(contract, {
+				fetch: async (request, init) => {
+					const token = await getClerkToken()
+					const headers = new Headers(init?.headers)
+					if (token) headers.set("Authorization", `Bearer ${token}`)
+					return fetch(request, { ...init, headers })
+				},
+				url: `${env.VITE_API_ORIGIN}/api`,
+			}),
+	)
+	.server(
+		() =>
+			new OpenAPILink(contract, {
+				headers: () => getRequestHeaders(),
+				url: `${env.API_ORIGIN}/api`,
+			}),
+	)
 ```
 
 ### 4) Querying + local cache (`@tanstack/react-query`, `@orpc/tanstack-query`)
 
 Why:
+
 - Predictable fetch lifecycle.
 - Reuseable query utilities from oRPC contract directly.
 
 How it is set up:
+
 - `apps/web/src/lib/orpc-query.ts` creates `createTanstackQueryUtils`.
 - `apps/web/src/router.tsx` configures shared `QueryClient` defaults (stale times, GC time).
 - Route loader in `/users` preloads `usersListQuery`.
@@ -137,17 +153,19 @@ How it is set up:
 Example:
 
 ```ts
-export const usersListQuery = orpc.users.list.queryOptions({ input: { cursor: 0, limit: 20 }})
+export const usersListQuery = orpc.users.list.queryOptions({ input: { cursor: 0, limit: 20 } })
 useSuspenseQuery(usersListQuery)
 ```
 
 ### 5) Local-first writes (`@tanstack/react-db`, `@tanstack/query-db-collection`)
 
 Why:
+
 - Keeps UI responsive with optimistic inserts.
 - Centralizes eventual reconciliation with API response.
 
 How it is set up:
+
 - `apps/web/src/lib/db` holds singleton DB collection creation.
 - `apps/web/src/entities/users/user.collection.ts` defines `onInsert` behavior.
 
@@ -155,23 +173,27 @@ Example:
 
 ```ts
 onInsert: async ({ collection, transaction }) => {
-  const createdUsers = await Promise.all(
-    transaction.mutations.map((mutation) => client.users.create(toCreateUserInput(mutation.modified))),
-  )
-  collection.utils.writeBatch(() => {
-    collection.utils.writeDelete(temporaryIds)
-    collection.utils.writeUpsert(createdUsers)
-  })
+	const createdUsers = await Promise.all(
+		transaction.mutations.map((mutation) =>
+			client.users.create(toCreateUserInput(mutation.modified)),
+		),
+	)
+	collection.utils.writeBatch(() => {
+		collection.utils.writeDelete(temporaryIds)
+		collection.utils.writeUpsert(createdUsers)
+	})
 }
 ```
 
 ### 6) API server (`hono`, `@orpc/server`, `@orpc/openapi`)
 
 Why:
+
 - Fast, edge-compatible HTTP host.
 - Native OpenAPI generation and typed handler execution.
 
 How it is set up:
+
 - `apps/core/src/index.ts` creates a Hono app and mounts:
   - health routes,
   - OpenAPI docs routes,
@@ -182,24 +204,25 @@ How it is set up:
 Example:
 
 ```ts
-app.use("/api/*", clerkMiddleware())
-  .use("/api/*", async (c, next) => {
-    const { matched, response } = await openApiHandler.handle(c.req.raw, {
-      context: createProcedureContext(c),
-      prefix: "/api",
-    })
-    if (matched) return c.newResponse(response.body, response)
-    return next()
-  })
+app.use("/api/*", clerkMiddleware()).use("/api/*", async (c, next) => {
+	const { matched, response } = await openApiHandler.handle(c.req.raw, {
+		context: createProcedureContext(c),
+		prefix: "/api",
+	})
+	if (matched) return c.newResponse(response.body, response)
+	return next()
+})
 ```
 
 ### 7) Authentication flow (`@clerk/hono`, `@clerk/tanstack-react-start`)
 
 Why:
+
 - Clerk handles user sessions consistently across SSR and browser.
 - Protects UI routes and API routes with one identity source.
 
 How it is set up:
+
 - Web uses `clerkMiddleware` in start instance and route-level `requireAuth()`.
 - Core attaches Clerk middleware to `auth` and `/api/*`.
 - Core handlers guard sensitive calls with `requireUserId(context.auth)`.
@@ -208,18 +231,20 @@ Example:
 
 ```ts
 function requireUserId(auth: SessionAuthObject) {
-  if (!auth.userId) throw new ORPCError("UNAUTHORIZED", { message: "Authentication required" })
-  return auth.userId
+	if (!auth.userId) throw new ORPCError("UNAUTHORIZED", { message: "Authentication required" })
+	return auth.userId
 }
 ```
 
 ### 8) Data layer (`drizzle-orm`, Neon proxy)
 
 Why:
+
 - Strongly typed SQL and migration-ready schema.
 - One shared schema source for API and app features.
 
 How it is set up:
+
 - `packages/db/src/schema/users.ts` owns `users` schema.
 - `packages/db/src/client.ts` exposes `createDb` and `createSql`.
 - `apps/core/src/orpc/router.ts` receives Drizzle db from context and uses query builder APIs (`select`, `insert`, `where`).
@@ -235,10 +260,12 @@ const [user] = await context.db.insert(users).values(input).returning()
 ### 9) Async events and side effects (`inngest`)
 
 Why:
+
 - Keep request/response path focused while delegating background work.
 - Enables future expansion for notifications, onboarding task orchestration, and reminders.
 
 How it is set up:
+
 - `apps/core/src/inngest/client.ts` creates a shared Inngest client and applies env-specific values through `configureInngestEnv`.
 - `apps/core/src/inngest/functions.ts` defines event handlers, including `user/created`.
 - `apps/core/src/inngest/index.ts` exposes Hono-compatible serve handler.
@@ -247,18 +274,20 @@ Example:
 
 ```ts
 await context.inngest.send({
-  name: "user/created",
-  data: { clerkUserId, email: user.email, name: user.name, userId: user.id },
+	name: "user/created",
+	data: { clerkUserId, email: user.email, name: user.name, userId: user.id },
 })
 ```
 
 ### 10) Local development infrastructure (`packages/infra`)
 
 Why:
+
 - Reproducible local environment for all contributors.
 - isolates external services from app code.
 
 How it is set up:
+
 - `packages/infra/compose.yaml` starts:
   - postgres (`5432`),
   - local Neon HTTP proxy (`4444`),
